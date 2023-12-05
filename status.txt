@@ -1,1 +1,1 @@
-Just finished the really raw outline for the calcultor. I want to start working on the parsing function to break each input into usable information.
+04 DEC 2023 Just finished the really raw outline for the calcultor. I want to start working on the parsing function to break each input into usable information.
