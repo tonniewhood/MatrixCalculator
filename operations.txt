@@ -2,7 +2,7 @@
 1 - add
 2 - subtract
 3 - multiply by a scalar
-4 - multiply by a vector
+4 - multiply by a Matrix/Vector
 5 - find inverse
 6 - perform LDU decomposition
 7 - perform QR factorization

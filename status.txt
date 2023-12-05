@@ -1,1 +1,3 @@
 04 DEC 2023 Just finished the really raw outline for the calcultor. I want to start working on the parsing function to break each input into usable information.
+
+05 DEC 2023 Worked on parsing, and handling a basic interface. Nothing too fancy, but basic syntax errors and handled, and it can identify the operation requested
