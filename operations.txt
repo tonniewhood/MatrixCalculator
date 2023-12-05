@@ -1,0 +1,19 @@
+0 - initialize matrix
+1 - add
+2 - subtract
+3 - multiply by a scalar
+4 - multiply by a vector
+5 - find inverse
+6 - perform LDU decomposition
+7 - perform QR factorization
+8 - perform diagonalization
+9 - perform SVD decomposition
+10 - display span
+11 - display eigenvalues and eigenvectors
+12 - display column space
+13 - display row space
+14 - display null space
+15 - display left null space
+16 - transpose the matrix
+17 - display a matrix
+18 - exit
