@@ -1,3 +1,7 @@
 04 DEC 2023 Just finished the really raw outline for the calcultor. I want to start working on the parsing function to break each input into usable information.
 
 05 DEC 2023 Worked on parsing, and handling a basic interface. Nothing too fancy, but basic syntax errors and handled, and it can identify the operation requested
+
+09 DEC 2023 Moved the various functions into a CalculatorInstance to clean up some of the main code and encapsulate all of the operations to remove some of the interaction
+with the operations. Also changed the functions.h header file to structs.h as it only contains the various necessary structures and no more function declarations. Finally I worked 
+on creating the "Make" operation.
