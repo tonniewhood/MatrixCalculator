@@ -1,0 +1,6 @@
+
+Matrix parsing error values
+    -1 - no error, value given to matrices that are parsed correctly
+    0 - Rows must all be the same size
+    1 - Matrix contents must start and end with square brakets
+    2 - Rows must have values that can convert into doubles and be seperated by commas;

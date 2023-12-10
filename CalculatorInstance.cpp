@@ -4,6 +4,7 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -12,14 +13,11 @@ class CalculatorInstance {
     private:
 
         /* data */
-        std::string operations[19] = {"Make", "Add", "Sub", "sMultiply", "Multiply", "Inv", "LDU", "QR", "Diag", "SVD", "Span", "Eigen", 
+        string operations[19] = {"Make", "Add", "Sub", "sMultiply", "Multiply", "Inv", "LDU", "QR", "Diag", "SVD", "Span", "Eigen", 
                                 "cSpace", "rSpace", "nSpace", "lnSpace", "Transpose", "Disp", "Exit"};
 
-        matrixEntry* matrixVariablesHead;
-        matrixEntry* matrixVaraiblesTail;
-
-        scalarEntry* scalarVariablesHead;
-        scalarEntry* scalarVaraiblesTail;
+        vector<scalarEntry> scalarList;
+        vector<matrixEntry> matrixList;
 
         /* methods */
         
@@ -31,6 +29,106 @@ class CalculatorInstance {
             int firstCommaIndex = inputString.find_first_of(',');
             string outputString = inputString.substr(firstCommaIndex + 1, string::npos);
             return outputString = outputString.substr(outputString.find_first_not_of(' '), string::npos);
+
+        }
+
+        /*
+        This method is designed to take the input for a user that is designed for a matrix, and return a list of the rows in the matrix
+        */
+        parsedMatrix parseForMatrix(string matrixContents){
+
+            vector<vector<double>> matrix;
+
+            // First check to make sure the first character is an open square braket, and that the last is a closed square bracket
+            bool enclosedInSquareBrakets = (matrixContents.front() == '[') && (matrixContents.back() == ']');
+            if (!enclosedInSquareBrakets){
+                vector<vector<double>> blank;
+                parsedMatrix improperSqureBrakets = {blank, true, 1};
+                return improperSqureBrakets;
+            }
+
+            matrixContents = matrixContents.substr(1, string::npos);
+            int rowSize = -1;
+
+            // Each itteration grab the next row and convert it into a vector of doubles
+            while(!matrixContents.empty()){
+
+                int firstSemiColonIndex = matrixContents.find_first_of(';');
+                string rowString = matrixContents.substr(0, firstSemiColonIndex + 1);
+                parsedRow rowList = stringRowToDouble(rowString);
+
+                if (rowList.hasError){
+                    vector<vector<double>> blank;
+                    parsedMatrix rowArgumentsIncorrect = {blank, true, 2};
+                    return rowArgumentsIncorrect;
+                }
+
+                matrix.push_back(rowList.rowContents);
+                matrixContents = matrixContents.substr(0, firstSemiColonIndex + 1);
+
+            }
+
+            parsedMatrix correctlyParsedMatrix = {matrix, false, -1};
+
+        }
+
+        /*
+        This method takes in a string and converts it into a vector of doubles
+        */
+        parsedRow stringRowToDouble(string rowString){
+
+            parsedRow rowInDoubles;
+
+            while (!rowString.empty()){
+
+                int firstCommaIndex = rowString.find_first_of(',');
+                string currentValue = rowString.substr(0, firstCommaIndex + 1);
+                double convertedValue;
+
+                // Try to convert the current entry into a double, if it doesn't work, return an empty vector to signal that there was an error
+                try {
+                    convertedValue = stod(currentValue);
+                }
+                catch (const invalid_argument& e){
+                    vector<double> blank;
+                    parsedRow improperArguments = {blank, true};
+                    return improperArguments;
+                }
+
+                rowInDoubles.rowContents.push_back(convertedValue);
+                rowString = rowString.substr(firstCommaIndex + 1, string::npos);
+
+            }
+
+            return rowInDoubles;
+
+        }
+
+        /*
+        This method takes the error that was found and prints it to the console
+        */
+        void displayInitializingError(int errorType){
+
+            switch (errorType) {
+
+                case 0 : {
+                    cout << "Rows must all be of the same size" << endl;
+                    return;
+                }
+                case 1 : {
+                    cout << "Matrix contents must start and end with square brakets" << endl;
+                    return;
+                }
+                case 2 : {
+                    cout << "Rows must have values that can convert into doubles and be seperated by commas;" << endl;
+                    return;
+                }
+                default : {
+                    cout << "Untracked error" << endl;
+                    return;
+                }
+
+            }
 
         }
 
@@ -52,21 +150,26 @@ class CalculatorInstance {
             // If the variable is not listed as a matrix or a scalar, inform the user and don't move forward with variable creation
             if (varType.compare("matrix") != 0) {
 
+                parsedMatrix matrix = parseForMatrix(remainingInput);
+                if (matrix.hasError) {
+                    displayInitializingError(matrix.errorType);
+                }
+                else {
+                    matrixEntry matrixToPush = {matrix.matrixContents, varLabel};
+                    matrixList.push_back(matrixToPush);
+                }
 
             }
             else if (varType.compare("scalar") == 0){
 
-                // First create a new entry for the scalar, then link it to the rest of the list
-
-                scalarEntry newVar = {stod(remainingInput), varLabel, nullptr};
-
-                if (this->scalarVariablesHead == nullptr){
-                    this->scalarVariablesHead = &newVar;
-                    this->scalarVaraiblesTail = &newVar;
+                // First create a new entry for the scalar, then add it to the rest of the list
+                try {
+                    double newValue = stod(remainingInput);
+                    scalarEntry newVar = {newValue, varLabel};
+                    scalarList.push_back(newVar);
                 }
-                else {
-                    this->scalarVaraiblesTail->nextScalarEntry = &newVar;
-                    this->scalarVaraiblesTail = &newVar;
+                catch (const invalid_argument& e){
+                    cout << "Value '" << remainingInput << "' could not be converted to a double" << endl;
                 }
 
             }

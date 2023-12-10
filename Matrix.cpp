@@ -1,16 +1,20 @@
 
+#include <vector>
+
+using namespace std;
+
 class Matrix {
 
     private : 
         int numRows;
         int numColumns;
-        double** matrixArray;
+        vector<vector<double>> matrixArray;
 
     public : 
-        Matrix(double** matrix_input, int numRows, int numColumns){
-            this->matrixArray = matrix_input;
-            this->numColumns = numColumns;
-            this->numRows = numRows;
+        Matrix(vector<vector<double>> matrixContents){
+            this->matrixArray = matrixContents;
+            this->numRows = matrixContents.size();
+            this->numColumns = matrixContents.front().size();
         };
 
 };

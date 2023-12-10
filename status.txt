@@ -5,3 +5,5 @@
 09 DEC 2023 Moved the various functions into a CalculatorInstance to clean up some of the main code and encapsulate all of the operations to remove some of the interaction
 with the operations. Also changed the functions.h header file to structs.h as it only contains the various necessary structures and no more function declarations. Finally I worked 
 on creating the "Make" operation.
+
+09 DEC 2023 cont. Completed the intial implementation of the variable initialization. This has not been tested yet
