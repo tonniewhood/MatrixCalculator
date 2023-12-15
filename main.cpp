@@ -1,7 +1,9 @@
 
-#include "structs.h"
-#include "CalculatorInstance.cpp"
 #include <iostream>
+
+#include "structs.h"
+#include "CalculatorInstance.h"
+#include "Matrix.h"
 
 using namespace std;
 

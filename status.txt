@@ -7,3 +7,7 @@ with the operations. Also changed the functions.h header file to structs.h as it
 on creating the "Make" operation.
 
 09 DEC 2023 cont. Completed the intial implementation of the variable initialization. This has not been tested yet
+
+15 DEC 2023 Finished the printing method for the matrix. It is generalized to handle values that are ints (with accuracy 1.0E-14), values greater than 1000, and doubles. I also
+refactored the CalculatorInstance.cpp file to properly function as required (Took the definition out and into the test.h file which will eventually change in name, and ordered the 
+data a methods according to return type, then alphabetically to hopefully make it easier to understand and find information)

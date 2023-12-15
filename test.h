@@ -41,4 +41,3 @@ struct operand {
     bool isMatrix;
     bool isScalar;
 };
-
