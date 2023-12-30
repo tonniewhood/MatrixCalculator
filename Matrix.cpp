@@ -2,9 +2,15 @@
 #include <vector>
 #include <iostream>
 #include <string>
-#include "test.h"
+#include <format>
+
+#include "Matrix.h"
+#include "structs.h"
 
 using namespace std;
+
+
+//Public Methods
 
 Matrix::Matrix(){
     this->numColumns = 0;
@@ -40,24 +46,6 @@ Matrix::Matrix(vector<vector<double>> matrixContents, string label){
 
 }
 
-int Matrix::getNumRows(){
-    return this->numRows;
-}
-
-int Matrix::getNumColumns(){
-    return this->numColumns;
-}
-
-double Matrix::getEntry(int rowIdx, int columnIdx){
-    vector<double> row = this->matrixArray.at(rowIdx);
-    double entry = row.at(columnIdx);
-    return entry;
-}
-
-string Matrix::getName(){
-    return this->matrixName;
-}
-
 void Matrix::print(){
 
     cout << endl << this->getName() <<  " =\n";
@@ -79,6 +67,90 @@ void Matrix::print(){
 
 }
 
+int Matrix::getNumColumns(){
+    return this->numColumns;
+}
+
+int Matrix::getNumRows(){
+    return this->numRows;
+}
+
+double Matrix::getEntry(int rowIdx, int columnIdx){
+    vector<double> row = this->matrixArray.at(rowIdx);
+    double entry = row.at(columnIdx);
+    return entry;
+}
+
+string Matrix::getName(){
+    return this->matrixName;
+}
+
+Matrix Matrix::multiply(double scalarOperand){
+
+    vector<vector<double>> newMatrixArray;
+    string newMatrixName = this->determineNameForAdding(scalarOperand);
+
+    for (int rowIdx = 0; rowIdx < this->getNumRows(); rowIdx++){
+
+
+        vector<double> currentRow = this->matrixArray.at(rowIdx);
+        vector<double> newRow;
+
+        for (int columnIdx = 0; columnIdx < this->getNumColumns(); columnIdx++){
+
+            double newValue = currentRow.at(columnIdx) * scalarOperand;
+            newRow.push_back(newValue);
+
+        }
+
+        newMatrixArray.push_back(newRow);
+            
+    }
+
+    Matrix newMatrix = Matrix(newMatrixArray, newMatrixName);
+    newMatrix.print();
+    return newMatrix;
+
+}
+
+Matrix Matrix::multiply(Matrix matrixOperand){
+
+    vector<vector<double>> newMatrixArray;
+    string newMatrixName = this->getName() + " * " + matrixOperand.getName();
+
+    if (this->getNumColumns() != matrixOperand.getNumRows()){
+        cout << "Error: Matrix dimensions do not match for multiplication." << endl;
+        return Matrix();
+    }
+
+    for (vector<double> row: this->matrixArray){
+
+        vector<double> newRow;
+
+        for (int columnIdx = 0; columnIdx < matrixOperand.getNumColumns(); columnIdx++){
+
+            double newValue = 0;
+
+            for (int i = 0; i < this->getNumColumns(); i++){
+
+                newValue += row.at(i) * matrixOperand.getEntry(i, columnIdx);
+
+            }
+
+            newRow.push_back(newValue);
+
+        }
+
+        newMatrixArray.push_back(newRow);
+
+    }
+
+    return Matrix(newMatrixArray, newMatrixName);
+
+}
+
+//Private Methods
+
 vector<const char*> Matrix::determinePrintfEntryValue(){
 
     vector<const char*> printfEntryValue;
@@ -98,5 +170,19 @@ vector<const char*> Matrix::determinePrintfEntryValue(){
     }
 
     return printfEntryValue;
+
+}
+
+string Matrix::determineNameForAdding(double value){
+
+    if (value >= 1000){
+        return vformat("{} * {%.3e}", make_format_args(this->getName(), value));
+    }
+    else if (value - (int) value < Matrix::EPSILON) {
+        return vformat("{} * {%.0f}", make_format_args(this->getName(), value));
+    }
+    else {
+        return vformat("{} * {%.4f}", make_format_args(this->getName(), value));
+    }
 
 }

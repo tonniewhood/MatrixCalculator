@@ -19,6 +19,13 @@ class Matrix {
         double getEntry(int rowIdx, int columnIdx);
 
         std::string getName();
+
+        // vector<Matrix> lowerTriangularDecomposition();
+        // vector<Matrix> upperTriangularDecomposition();
+
+        // Matrix multiply(Matrix Matrixoperand);
+        Matrix multiply(double scalarOperand);
+        Matrix multiply(Matrix matrixOperand);
         
 
     private:
@@ -37,6 +44,8 @@ class Matrix {
 
 
         /* Methods */ 
-        std::vector<const char*> determinePrintfEntryValue();
+        std::string determineNameForAdding(double value);
+
+        std::vector<const char*> determinePrintfEntryValue();  
 
 };
